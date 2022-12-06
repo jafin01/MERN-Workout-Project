@@ -12,9 +12,7 @@ app.use((req, res, next) => {
 })
 
 // Route 
-app.get('/', (req, res) => {
-  res.json({ mssg: "Welcome to the app" });
-})
+app.use('/workouts', require('./routes/workouts'))
 
 // Listening for requests
 app.listen(process.env.PORT, () => {
