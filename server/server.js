@@ -11,7 +11,7 @@ app.use((req, res, next) => {
   next();
 })
 
-// Route 
+// Routes
 app.use('/workouts', require('./routes/workouts'))
 
 // Listening for requests
