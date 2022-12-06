@@ -1,6 +1,8 @@
-require('dotenv').config();
+require("dotenv").config();
+require('colors')
 
-const express = require('express')
+const express = require("express");
+const connectToDb = require("./config/db");
 
 // App init
 const app = express();
@@ -9,12 +11,20 @@ const app = express();
 app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
-})
+});
+
+connectToDb((host) => {
+  console.log(`MongoDB connected to ${host}`.cyan.underline);
+  listenToPort();
+});
 
 // Routes
-app.use('/workouts', require('./routes/workouts'))
+app.use("/api/workouts", require("./routes/workouts"));
+
 
 // Listening for requests
-app.listen(process.env.PORT, () => {
-  console.log('Listening to port', process.env.PORT);
-})
+const listenToPort = () => {
+  app.listen(process.env.PORT, () => {
+    console.log("Listening to port", process.env.PORT);
+  });
+};
