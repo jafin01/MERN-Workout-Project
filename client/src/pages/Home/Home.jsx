@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import WorkoutDetails from "../../components/WorkoutDetails/WorkoutDetails";
+import WorkoutForm from "../../components/WorkoutForm/WorkoutForm";
 import classes from "./Home.module.css";
 
 const Home = () => {
@@ -12,7 +13,8 @@ const Home = () => {
       const json = await response.json();
 
       if (response.ok) {
-        setWorkouts(json);
+        const fetchedWorkouts = json.reverse();
+        setWorkouts(fetchedWorkouts);
       }
     };
 
@@ -20,11 +22,12 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home">
+    <div className={classes.home}>
       <div className={classes.workouts}>
         {workouts &&
           workouts.map((workout) => <WorkoutDetails key={workout._id} workout={workout} />)}
       </div>
+      <WorkoutForm />
     </div>
   );
 };
