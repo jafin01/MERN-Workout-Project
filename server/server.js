@@ -1,11 +1,15 @@
 require("dotenv").config();
-require('colors')
+require("colors");
 
 const express = require("express");
 const connectToDb = require("./config/db");
+const errorHandler = require("./middlewares/errorMiddleware");
 
 // App init
 const app = express();
+
+app.use(express.json());
+// app.use(express.urlencoded({extended : false}))
 
 // Middleware
 app.use((req, res, next) => {
@@ -21,6 +25,8 @@ connectToDb((host) => {
 // Routes
 app.use("/api/workouts", require("./routes/workouts"));
 
+// Error Handling
+app.use(errorHandler);
 
 // Listening for requests
 const listenToPort = () => {
