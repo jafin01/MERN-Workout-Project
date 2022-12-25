@@ -1,10 +1,10 @@
-import { useState } from "react";
-import classes from "./WorkoutForm.module.css";
+import React, { useState } from 'react';
+import classes from './WorkoutForm.module.css';
 
-const WorkoutForm = () => {
-  const [title, setTitle] = useState("");
-  const [load, setLoad] = useState("");
-  const [reps, setReps] = useState("");
+function WorkoutForm() {
+  const [title, setTitle] = useState('');
+  const [load, setLoad] = useState('');
+  const [reps, setReps] = useState('');
   const [error, setError] = useState(null);
 
   const submitHandler = async (e) => {
@@ -16,11 +16,11 @@ const WorkoutForm = () => {
       reps,
     };
 
-    const response = await fetch("/api/workouts", {
-      method: "POST",
+    const response = await fetch('/api/workouts', {
+      method: 'POST',
       body: JSON.stringify(workout),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const json = await response.json();
@@ -30,11 +30,12 @@ const WorkoutForm = () => {
     }
 
     if (response.ok) {
-      setTitle("");
-      setLoad("");
-      setReps("");
+      setTitle('');
+      setLoad('');
+      setReps('');
       setError(null);
-      console.log("new Workout Added", json);
+      // eslint-disable-next-line no-console
+      console.log('new Workout Added', json);
     }
   };
 
@@ -42,29 +43,35 @@ const WorkoutForm = () => {
     <form className={classes.create} onSubmit={submitHandler}>
       <h3>Add a New Workout</h3>
 
-      <label>Exercise Title:</label>
-      <input
-        type="text"
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-      />
-      <label>Load (in kg):</label>
-      <input
-        type="number"
-        onChange={(e) => setLoad(e.target.value)}
-        value={load}
-      />
-      <label>Reps:</label>
-      <input
-        type="number"
-        onChange={(e) => setReps(e.target.value)}
-        value={reps}
-      />
+      <label htmlFor="title">
+        Exercise Title:
+        <input
+          type="text"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+        />
+      </label>
+      <label htmlFor="load">
+        Load (in kg):
+        <input
+          type="number"
+          onChange={(e) => setLoad(e.target.value)}
+          value={load}
+        />
+      </label>
+      <label htmlFor="reps">
+        Reps:
+        <input
+          type="number"
+          onChange={(e) => setReps(e.target.value)}
+          value={reps}
+        />
+      </label>
 
-      <button>Add Workout</button>
+      <button type="button">Add Workout</button>
       {error && <div className={classes.error}>{error}</div>}
     </form>
   );
-};
+}
 
 export default WorkoutForm;

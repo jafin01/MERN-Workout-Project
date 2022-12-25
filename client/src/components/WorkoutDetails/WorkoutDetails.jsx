@@ -1,6 +1,7 @@
-import classes from "./WorkoutDetails.module.css";
+import React from 'react';
+import classes from './WorkoutDetails.module.css';
 
-const WorkoutDetails = ({ workout }) => {
+function WorkoutDetails({ workout }) {
   return (
     <div className={classes.workout_details}>
       <h4>{workout.title}</h4>
@@ -15,6 +16,6 @@ const WorkoutDetails = ({ workout }) => {
       <p>{workout.createdAt}</p>
     </div>
   );
-};
+}
 
 export default WorkoutDetails;
