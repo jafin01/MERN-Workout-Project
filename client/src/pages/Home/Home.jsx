@@ -1,11 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import { React, useEffect } from 'react';
 
 import WorkoutDetails from '../../components/WorkoutDetails/WorkoutDetails';
 import WorkoutForm from '../../components/WorkoutForm/WorkoutForm';
+import useWorkoutsContext from '../../hooks/useWorkoutsContext';
 import classes from './Home.module.css';
 
 function Home() {
-  const [workouts, setWorkouts] = useState(null);
+  const { workouts, dispatch } = useWorkoutsContext();
 
   useEffect(() => {
     const fetchWorkout = async () => {
@@ -13,8 +14,8 @@ function Home() {
       const json = await response.json();
 
       if (response.ok) {
-        const fetchedWorkouts = json.reverse();
-        setWorkouts(fetchedWorkouts);
+        const fetchedWokouts = json.reverse();
+        dispatch({ type: 'SET_WORKOUTS', payload: fetchedWokouts });
       }
     };
 

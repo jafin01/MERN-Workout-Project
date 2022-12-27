@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import useWorkoutsContext from '../../hooks/useWorkoutsContext';
 import classes from './WorkoutForm.module.css';
 
 function WorkoutForm() {
+  const { dispatch } = useWorkoutsContext();
+
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
   const [reps, setReps] = useState('');
   const [error, setError] = useState(null);
+  const [emptyFields, setEmptyFields] = useState([]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -15,7 +19,6 @@ function WorkoutForm() {
       load,
       reps,
     };
-
     const response = await fetch('/api/workouts', {
       method: 'POST',
       body: JSON.stringify(workout),
@@ -26,7 +29,8 @@ function WorkoutForm() {
     const json = await response.json();
 
     if (!response.ok) {
-      setError(json.message);
+      setError(json.error);
+      setEmptyFields(json.emptyFields);
     }
 
     if (response.ok) {
@@ -34,8 +38,10 @@ function WorkoutForm() {
       setLoad('');
       setReps('');
       setError(null);
+      setEmptyFields([]);
       // eslint-disable-next-line no-console
       console.log('new Workout Added', json);
+      dispatch({ type: 'CREATE_WORKOUT', payload: json });
     }
   };
 
@@ -46,6 +52,7 @@ function WorkoutForm() {
       <label htmlFor="title">
         Exercise Title:
         <input
+          className={emptyFields.includes('title') ? classes.error : ''}
           type="text"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
@@ -54,6 +61,7 @@ function WorkoutForm() {
       <label htmlFor="load">
         Load (in kg):
         <input
+          className={emptyFields.includes('load') ? classes.error : ''}
           type="number"
           onChange={(e) => setLoad(e.target.value)}
           value={load}
@@ -62,13 +70,14 @@ function WorkoutForm() {
       <label htmlFor="reps">
         Reps:
         <input
+          className={emptyFields.includes('reps') ? classes.error : ''}
           type="number"
           onChange={(e) => setReps(e.target.value)}
           value={reps}
         />
       </label>
 
-      <button type="button">Add Workout</button>
+      <button type="submit">Add Workout</button>
       {error && <div className={classes.error}>{error}</div>}
     </form>
   );
